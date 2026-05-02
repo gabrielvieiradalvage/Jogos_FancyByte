@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <!-- Custom PreHead code is injected here -->
+    
+
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name ="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta charset="utf-8"/>
+
+        <!-- Builtin injector for disabling cache -->
+        <meta http-equiv="pragma" content="no-cache"/>
+
+        <!-- Set the title bar of the page -->
+        <title>NIGHTMARE: BOSS RUSH | FancyByte v2.2.0</title>
+
+        <!-- Custom PreStyle code is injected here -->
+        
+
+        <!-- Set the background colour of the document -->
+        <style>
+            :root {
+                --bg-color: #050505;
+                --accent-color: #ffffff;
+                --card-bg: #0a0a0a;
+                --text-dim: #777;
+                --border-color: #222;
+                --dev-blue: #00ffff;
+                --fancy-red: #ff0044;
+                --undertale-yellow: #ffff00;
+                --spectra-green: #32cd32;
+                --esper-purple: #9933ff;
+                --dark-sky-blue: #00aaff;
+            }
+
+            body {
+                background: var(--bg-color);
+                color: var(--accent-color);
+                margin: 0px;
+                padding: 0px;
+                border: 0px;
+                font-family: 'Courier New', Courier, monospace;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            /* Oculta elementos da UI quando em tela cheia */
+            :fullscreen .hide-on-fs { display: none !important; }
+            :-webkit-full-screen .hide-on-fs { display: none !important; }
+
+            .game-title {
+                margin-top: 30px;
+                margin-bottom: 12px;
+                letter-spacing: 6px;
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+            canvas {
+                image-rendering: optimizeSpeed;
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                -webkit-interpolation-mode: nearest-neighbor;
+                -ms-touch-action: none;
+                touch-action: none;
+                margin: 0px;
+                padding: 0px;
+                border: 0px;
+                display: block;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            :-webkit-full-screen #canvas { width: 100%; height: 100%; }
+            :-webkit-full-screen { width: 100%; height: 100%; }
+
+            /* Custom Runner Styles Adaptados */
+            div.gm4html5_div_class {
+                position: relative;
+                border: 2px solid #333;
+                background: #000;
+                width: 95%;
+                max-width: 1024px; 
+                aspect-ratio: 16 / 9;
+                box-shadow: 0 10px 60px rgba(0, 0, 0, 0.9);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            div.gm4html5_div_class:fullscreen { width: 100vw; height: 100vh; max-width: none; border: none; }
+            :-webkit-full-screen div.gm4html5_div_class { width: 100vw; height: 100vh; max-width: none; border: none; }
+
+            div.gm4html5_login { padding: 20px; position: absolute; border: solid 2px #000000; background-color: #404040; color:#00ff00; border-radius: 15px; box-shadow: #101010 20px 20px 40px; }
+            div.gm4html5_cancel_button { float: right; }
+            div.gm4html5_login_button { float: left; }
+            div.gm4html5_login_header { text-align: center; }
+
+            /* Overlay e Interface FancyByte */
+            #overlay {
+                position: absolute;
+                inset: 0;
+                background: #000;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10;
+                cursor: pointer;
+                transition: opacity 0.4s;
+            }
+            #overlay h1 { font-size: 36px; letter-spacing: 12px; margin-bottom: 5px; }
+            #overlay p { color: var(--fancy-red); animation: blink 1.5s infinite; font-weight: bold; }
+            @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+            .controls-info {
+                margin-top: 20px;
+                text-align: center;
+                font-size: 12px;
+                color: var(--text-dim);
+                line-height: 1.8;
+            }
+            .key { color: #fff; border: 1px solid #444; padding: 2px 6px; border-radius: 4px; background: #111; margin: 0 3px; }
+
+            #fs-button {
+                margin: 20px 0 40px 0;
+                background: transparent;
+                border: 1px solid #444;
+                color: #666;
+                padding: 10px 25px;
+                cursor: pointer;
+                font-family: inherit;
+                transition: 0.3s;
+            }
+            #fs-button:hover { border-color: #fff; color: #fff; }
+
+            /* Estilização da Documentação Técnica */
+            .study-section {
+                max-width: 960px;
+                width: 90%;
+                margin-bottom: 80px;
+                padding: 50px;
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                color: #aaa;
+                line-height: 1.8;
+            }
+            .study-section h2 { color: #fff; border-bottom: 2px solid #333; padding-bottom: 15px; margin-top: 40px; letter-spacing: 2px; }
+            .study-section h3 { color: #eee; margin-top: 30px; font-size: 20px; border-left: 4px solid var(--fancy-red); padding-left: 15px; }
+            .highlight { color: #fff; font-weight: bold; }
+            .ut-highlight { color: var(--undertale-yellow); font-weight: bold; }
+            .spectra-highlight { color: var(--spectra-green); font-weight: bold; }
+            .esper-highlight { color: var(--esper-purple); font-weight: bold; }
+            .dark-sky-highlight { color: var(--dark-sky-blue); font-weight: bold; }
+            .update-tag { background: #1a1a1a; color: var(--dev-blue); padding: 2px 10px; border-radius: 4px; font-size: 14px; font-weight: bold; }
+            
+            .doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+            @media (max-width: 768px) { .doc-grid { grid-template-columns: 1fr; } }
+            
+            ul { padding-left: 20px; list-style-type: square; }
+            li { margin-bottom: 8px; }
+            .sub-list { padding-left: 20px; margin-top: 8px; list-style-type: circle; }
+        </style>
+
+        <!-- Custom PostStyle code is injected here -->
+        
+
+        <!-- Builtin injector for injecting flurry analytics code -->
+        
+    </head>
+
+    <!-- Custom PostHead code is injected here -->
+    
+
+    <!-- Custom PreBody code is injected here -->
+    
+
+    <body>
+        <!-- Custom BodyStart code is injected here -->
+        
+
+        <div class="game-title hide-on-fs">NIGHTMARE</div>
+
+        <div class="gm4html5_div_class" id="gm4html5_div_id">
+            
+            <!-- Builtin injector for splash screen -->
+            
+
+            <!-- Overlay de Liberação de Áudio e Início -->
+            <div id="overlay" onclick="hideOverlay()">
+                <h1>FANCYBYTE</h1>
+                <p>[ CLIQUE PARA INICIAR ]</p>
+            </div>
+
+            <!-- Custom PreCanvas code is injected here -->
+            
+
+            <!-- Create the canvas element the game draws to -->
+            <canvas id="canvas" width="1280" height="720" >
+                
+                <p>Your browser doesn't support HTML5 canvas.</p>
+            </canvas>
+            
+            <!-- Custom PostCanvas code is injected here -->
+            
+        </div>
+
+        <div class="controls-info hide-on-fs">
+            Mover: <span class="key">Setas/WASD</span> | 
+            Dash: <span class="key">SHIFT</span> | 
+            Confirmar: <span class="key">Z/Enter</span> |
+            Sair: <span class="key">ESC (Segurar)</span> |
+            Tela Cheia: <span class="key">F4</span>
+        </div>
+
+        <button id="fs-button" class="hide-on-fs" onclick="toggleFullScreen()">ATIVAR TELA CHEIA</button>
+
+        <main class="study-section hide-on-fs">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <span class="update-tag">BUILD OFICIAL v2.2.0</span>
+                <h1 style="color: #fff; margin-top: 10px;">Documentação Técnica de Desenvolvimento</h1>
+                <p>Um projeto de <span class="highlight">Gabriel Vieira Dalvage</span> | Estúdio FancyByte</p>
+            </div>
+
+            <h2>Notas da Atualização v2.2.0 (Atual)</h2>
+            <p>Esta versão traz um salto de qualidade de vida (QoL) com foco na correção geral de bugs, refinamento do elenco de chefões e suporte completo a hardwares externos.</p>
+            <ul>
+                <li><span class="highlight">Correção de Bugs:</span> Resolução de travamentos isolados e otimização geral de performance no HTML5.</li>
+                <li><span class="highlight">Balanceamento de Personagens:</span>
+                    <ul class="sub-list">
+                        <li><span class="dark-sky-highlight">Dark Sky:</span> Ajuste rigoroso nos frames de ataque e correção de hitboxes para tornar a luta mais justa e fluida.</li>
+                        <li><span class="esper-highlight">Esper:</span> Correção de bugs na manipulação de gravidade e sincronia fina dos blasters.</li>
+                        <li><span class="spectra-highlight">Oliva:</span> Reprogramação das rotinas de esquiva diagonal, corrigindo falhas de colisão visual.</li>
+                    </ul>
+                </li>
+                <li><span class="highlight">Integração de Controles (Gamepad):</span> Suporte nativo e mapeamento oficial adicionado para controles de <span class="highlight">PlayStation 5 (DualSense)</span> e <span class="highlight">Xbox</span>. A navegação de menus e a gameplay em arena agora respondem perfeitamente aos analógicos e D-Pad.</li>
+            </ul>
+
+            <hr style="border: 1px solid #222; margin: 40px 0;">
+
+            <h2>1. Visão Geral e Inspirações</h2>
+            <p><strong>Nightmare: Boss Rush</strong> é um tributo técnico às mecânicas de combate consagradas por <span class="ut-highlight">Undertale</span>. O projeto replica a dualidade rítmica entre a navegação em menus e a sobrevivência intensa em Bullet Hell.</p>
+
+            <div class="doc-grid">
+                <div>
+                    <h3>2. Sistemas Base (Core)</h3>
+                    <ul>
+                        <li><span class="highlight">FSM (State Machine):</span> Organiza Lobby, Diálogo, Turno Player e Turno Enemy.</li>
+                        <li><span class="highlight">Energia Mental (E.M):</span> Gerencia custo de habilidades e fadiga.</li>
+                        <li><span class="highlight">Dash e I-Frames:</span> Mobilidade rápida com frames de invencibilidade.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>3. O Lobby</h3>
+                    <ul>
+                        <li><span class="highlight">Character Selection:</span> Escolha dinâmica de adversários com transição de áudio.</li>
+                        <li><span class="highlight">Navegação Híbrida:</span> Suporte completo a analógicos e D-Pad com delay de trava.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>4. Notas da v1.5.0 - A Fera Spectra</h2>
+            <ul>
+                <li><span class="spectra-highlight">Oliva:</span> A Cavaleira Spectra. Luta focada em esquivas diagonais e golpes falsos.</li>
+                <li><span class="highlight">Hit-Phases:</span> Migração de colisões para o Step via <code>instance_place</code> para fases holográficas.</li>
+            </ul>
+
+            <h2>5. Notas da Atualização v1.7.5 - O Despertar do Vazio</h2>
+            <ul>
+                <li><span class="esper-highlight">Novo Boss: Esper:</span> O mestre gravitacional. Introdução de blasters sequenciais (Círculo Spectra) e inversão de gravidade em tempo real.</li>
+                <li><span class="highlight">Dev Mode "Infinito":</span> O modo desenvolvedor foi reescrito para ignorar travas de estado. Agora é possível trocar de ataque instantaneamente via teclas numéricas (1-0) mesmo durante diálogos.</li>
+                <li><span class="highlight">Sincronização de Áudio:</span> Correção crítica no sistema de áudio das Blasters. Implementação de <code>audio_stop_sound</code> preventivo e aumento de prioridade (15) para evitar disparos mudos.</li>
+                <li><span class="highlight">Correção de Ângulos:</span> Refatoração da matemática de mira (<code>point_direction</code>) para compensar sprites desenhados em eixos não-ortogonais.</li>
+                <li><span class="highlight">Estabilidade de Turno:</span> Limpeza de objetos residuais (Campos gravitacionais e projéteis) ao forçar troca de turnos via Cheat Code.</li>
+            </ul>
+        </main>
+
+        <!-- Run the game code (O SCRIPT NOVO E CORRIGIDO!) -->
+        <script type="text/javascript" src="html5game/v2.2.0.js?cachebust=1270374282"></script>
+
+        <!-- Builtin injector for injecting runner path -->
+        
+
+        <!-- O Init nativo do GM -->
+        <script>window.onload = GameMaker_Init;</script>
+
+        <!-- Os nossos Scripts Adicionais (Overlay e Fullscreen) -->
+        <script>
+            function hideOverlay() {
+                const overlay = document.getElementById('overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    window.focus(); // Passa o controle para o GameMaker logo após clicar
+                }, 400);
+            }
+
+            function toggleFullScreen() {
+                var el = document.getElementById("gm4html5_div_id");
+                if (!document.fullscreenElement) {
+                    if (el.requestFullscreen) el.requestFullscreen();
+                    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            }
+
+            window.addEventListener("keydown", function(e) {
+                if (e.key === "F4" || e.keyCode === 115) {
+                    e.preventDefault(); 
+                    toggleFullScreen();
+                }
+            });
+
+            document.getElementById("canvas").addEventListener("click", function() {
+                window.focus();
+            });
+        </script>
+
+        <!-- Builtin injector for injecting google analytics code -->
+        
+
+        <!-- Custom BodyEnd code is injected here -->
+        
+    </body>
+
+    <!-- Custom PostBody code is injected here -->
+    
+</html>
